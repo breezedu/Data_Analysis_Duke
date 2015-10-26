@@ -78,22 +78,27 @@ summary(fitX3_Lamb)
 
 ## plot all fited models
 # plot fitX1 to two offsets
+par(mfrow=c(2,2))
 plot(fitX1_mLamb)
 
+par(mfrow=c(2,2))
 plot(fitX1_Lamb)
 
 
 # plot fit X2 to two offsets
+par(mfrow=c(2,2))
 plot(fitX2_mLamb)
 
+par(mfrow=c(2,2))
 plot(fitX2_Lamb)
 
 
 # plot fit X3 to two offsets
+par(mfrow=c(2,2))
 plot(fitX3_mLamb)
 
+par(mfrow=c(2,2))
 plot(fitX3_Lamb)
-
 
 
 

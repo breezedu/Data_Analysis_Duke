@@ -23,3 +23,40 @@ gained_clean = na.omit(nc$gained)
 
 # the length of gained_clean
 n = length(gained_clean)
+
+
+# create a new object boot_means to store bootstrap means
+boot_means = rep(NA, 100)
+
+
+# take 100 bootstrap samples, record their means in boot_means
+for(i in 1:100){
+  boot_sample = sample(gained_clean, n, replace = TRUE)
+  boot_means[i] = mean(boot_sample)                       
+}
+
+summary(boot_sample)
+
+
+## the inference function
+source("http://bit.ly/dasi_inference")
+
+inference(nc$gained, type = "ci", method = "simulation", conflevel = 0.90, est = "mean", boot_method = "perc")
+
+
+inference(nc$gained, type = "ci", method = "simulation", conflevel = 0.95, est = "mean", boot_method = "perc")
+
+
+inference(nc$gained, type = "ci", method = "simulation", conflevel = 0.95, est = "mean", boot_method = "se")
+
+
+inference(nc$gained, type = "ci", method = "simulation", conflevel = 0.95, est = "median", boot_method = "se")
+
+
+by(nc$weight, nc$habit, mean)
+
+
+inference(y = nc$weight, x = nc$habit, est = "mean", type = "ht", null = 0, alternative = "twosided", method = "theoretical")
+
+
+inference(y = nc$weight, x = nc$habit, est = "mean", type = "ht", null = 0, alternative = "twosided", method = "theoretical", order = c("smoker","nonsmoker"))

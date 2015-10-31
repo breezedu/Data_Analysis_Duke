@@ -15,3 +15,6 @@
 load(url("http://bit.ly/dasi_nc"))
 head(nc)
 
+# summary
+summary(nc)
+

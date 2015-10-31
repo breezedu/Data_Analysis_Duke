@@ -18,3 +18,8 @@ head(nc)
 # summary
 summary(nc)
 
+## create a cleaned-up version of the weight gain variable
+gained_clean = na.omit(nc$gained)
+
+# the length of gained_clean
+n = length(gained_clean)

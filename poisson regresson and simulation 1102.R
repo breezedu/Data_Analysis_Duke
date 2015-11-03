@@ -36,7 +36,40 @@ age <- rnorm(1000, 35, 6)
 
 ##### Read in a table of mutation rate and parental ages
 ## from local file
-data <- read.table("denovo_age_data.txt", sep = "\t")
+data <- read.table("denovo_age_data.txt", header = TRUE, sep = "\t")
+summary(data)
+
+plot(data$AgeFatherAtConception, data$nDNM, main = "FatherAge vs Denovo Mutation", 
+     xlab = "fathers' age", ylab = "denovo mutation")
+
+## add fit lines
+abline( lm( data$nDNM ~ data$AgeFatherAtConception), col = "blue") 
+lines(lowess(data$nDNM, data$AgeFatherAtConception), col = "red")
+
+age <- data$AgeFatherAtConception
+mute <- data$nDNM
+
+
+## fit mutations against father's age
+fitMuteAge <- glm(mute ~ age, family = "poisson")
+summary(fitMuteAge)
+
+
+## coeff
+coeff <- coef(fitMuteAge)
+coeff
+
+plot(age, mute)
+xvalues <- sort(age)
+log_mean <- coeff[1] + coeff[2] * xvalues
+
+mean_value <- exp(log_mean)
+lines(xvalues, mean_value)
+
+
+## Q-Q plot
+par(mfrow=c(2,2))
+plot(fitMuteAge)
 
 # number of mutations (count) in gene_X
 # here we try three different methods to generate mutations

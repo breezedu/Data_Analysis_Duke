@@ -65,6 +65,35 @@ lines(xvalues, mean_value)
 plot(age, mute)
 lines(xvalues, mean_value)
 
+## Q-Q plot
+par(mfrow=c(2,2))
+plot(fitMuteAge)
+
+
+#####################################
+## model allowing for overdispersion:
+
+fit.overdis <- glm(mute ~ age, family = quasipoisson)
+summary(fit.overdis)
+
+## coefficient
+coeff.overdis <- coef(fit.overdis)
+coeff.overdis
+
+par(mfrow = c(1, 1))
+
+plot(age, mute)
+xvalues <-sort(age)
+log_mean.overdis <- coeff.overdis[1] + coeff.overdis[2] * xvalues
+
+mean_value.overdis <- exp(log_mean.overdis)
+lines(xvalues, mean_value.overdis)
+
+
+
+
+
+
 
 #######################
 ## fit log-mutations against father's age

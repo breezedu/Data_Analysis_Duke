@@ -27,16 +27,117 @@ require(msm)
 ## the mutation rate in a certain gene
 ## 
 
+
+
+##### Read in a table of mutation rate and parental ages
+## from local file
+## the txt document is also available in my github: 
+##https://github.com/breezedu/Data_Analysis_Duke/blob/master/Figures/denovo_age_data.txt
+
+data <- read.table("denovo_age_data.txt", header = TRUE, sep = "\t")
+summary(data)
+
+plot(data$AgeFatherAtConception, data$nDNM, main = "FatherAge vs Denovo Mutation", 
+     xlab = "fathers' age", ylab = "denovo mutation")
+
+## add fit lines
+abline( lm( data$nDNM ~ data$AgeFatherAtConception), col = "blue") 
+lines(lowess(data$nDNM, data$AgeFatherAtConception), col = "red")
+
+age <- data$AgeFatherAtConception
+mute <- data$nDNM
+
+
+## fit mutations against father's age
+fitMuteAge <- glm(mute ~ age, family = "poisson")
+summary(fitMuteAge)
+
+
+## coeff
+coeff <- coef(fitMuteAge)
+coeff
+
+par(mfrow=c(1,1))
+plot(age, mute)
+xvalues <- sort(age)
+log_mean <- coeff[1] + coeff[2] * xvalues
+
+mean_value <- exp(log_mean)
+lines(xvalues, mean_value)
+
+plot(age, mute)
+lines(xvalues, mean_value)
+
+## Q-Q plot
+par(mfrow=c(2,2))
+plot(fitMuteAge)
+
+
+#####################################
+## model allowing for overdispersion:
+
+fit.overdis <- glm(mute ~ age, family = quasipoisson)
+summary(fit.overdis)
+
+## coefficient
+coeff.overdis <- coef(fit.overdis)
+coeff.overdis
+
+par(mfrow = c(1, 1))
+
+plot(age, mute)
+xvalues <-sort(age)
+log_mean.overdis <- coeff.overdis[1] + coeff.overdis[2] * xvalues
+
+mean_value.overdis <- exp(log_mean.overdis)
+lines(xvalues, mean_value.overdis)
+
+
+
+
+
+
+#######################
+#######################
+## fit log-mutations against father's age
+## this looks similar to the upper plot 
+#mute.log <- as.integer(mute.log)
+mute.log <- log(mute)
+mute.log
+
+fitLogMute <- glm(mute.log ~ age, family = "poisson")
+summary(fitLogMute)
+
+## coeff of log mutations against age
+coeff.log <- coef(fitLogMute)
+coeff.log
+
+plot(age, mute.log)
+x_values.log <- sort(age)
+
+mean.log <- coeff.log[1] + coeff.log[2] * x_values.log
+mean_value.log <- exp(mean.log)
+lines(x_values.log, mean_value.log)
+
+
+## Q-Q plot
+par(mfrow=c(2,2))
+##plot(fitMuteAge)
+
+plot(fitLogMute)
+
+
+
+
+
+
+############################################################
 # mutation rate for gene_X
 lambda <- runif(1000,5,9)
 
 # generate fathers' age, a normal distribution (35, 6)
 age <- rnorm(1000, 35, 6)
 
-
-##### Read in a table of mutation rate and parental ages
-## from local file
-data <- read.table("denovo_age_data.txt", sep = "\t")
 
 # number of mutations (count) in gene_X
 # here we try three different methods to generate mutations
@@ -104,6 +205,11 @@ plot(fitX3_mLamb)
 
 par(mfrow=c(2,2))
 plot(fitX3_Lamb)
+
+
+
+
+
 
 
 

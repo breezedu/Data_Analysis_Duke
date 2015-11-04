@@ -1,5 +1,21 @@
+## ShuaiQi's Project
+## Date 11-04-2015
+## Aim:
+## @ authors:
+## Data source:
+## Models:
+## Parameters:
+
+
 #using glmer for poisson multilevel regression
+install.packages("lme4")
+install.packages("Matrix")
+
+library("Matrix")
 library("lme4")
+
+
+
 my.control=glmerControl(optCtrl=list(maxfun=20) ) 
 fitgene<-glmer(envarpfc~(1|gene)+envarp+1,data=table, family=poisson(link="log"),control = my.control) 
 summary(fitgene)

@@ -31,6 +31,9 @@ require(msm)
 
 ##### Read in a table of mutation rate and parental ages
 ## from local file
+## the txt document is also available in my github: 
+##https://github.com/breezedu/Data_Analysis_Duke/blob/master/Figures/denovo_age_data.txt
+
 data <- read.table("denovo_age_data.txt", header = TRUE, sep = "\t")
 summary(data)
 
@@ -97,7 +100,7 @@ lines(xvalues, mean_value.overdis)
 #######################
 #######################
 ## fit log-mutations against father's age
-## this does not work, ==! 
+## this looks similar to the upper plot 
 #mute.log <- as.integer(mute.log)
 mute.log <- log(mute)
 mute.log
@@ -119,9 +122,13 @@ lines(x_values.log, mean_value.log)
 
 ## Q-Q plot
 par(mfrow=c(2,2))
-plot(fitMuteAge)
+##plot(fitMuteAge)
 
 plot(fitLogMute)
+
+
+
+
 
 
 ############################################################
@@ -198,6 +205,11 @@ plot(fitX3_mLamb)
 
 par(mfrow=c(2,2))
 plot(fitX3_Lamb)
+
+
+
+
+
 
 
 

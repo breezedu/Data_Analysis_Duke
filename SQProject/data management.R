@@ -9,7 +9,7 @@
 
 ## Data source and copyright?
 ## Read in table from local hard drive:
-table <- read.table("C:/Users/shuaiqi/Desktop/duke/Andrew/data/for_asa/other_stuff/exon_level_process_v2.txt")
+table <- read.table("exon_level_process_v2.txt")
 #table<-read.table("C:/Users/shuaiqi/Desktop/duke/Andrew/data/for_asa/other_stuff/exon_level_process_v3.txt")
 
 

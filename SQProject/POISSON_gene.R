@@ -83,10 +83,21 @@ summary(logomim)
      
 
 
-
-
+#############################################################
+## have to download and install RTools33.exe for windows OS
+#############################################################
 #use stan
+install.packages("rstan")
+
 library("rstan")
+
+
+## For execution on a local, multicore CPU with excess RAM we recommend calling
+## rstan_options(auto_write = TRUE)
+## options(mc.cores = parallel::detectCores())
+rstan_options(auto_write = TRUE)
+options(mc.cores = parallel::detectCores())
+
 
 gene_code<-"
 data{   #get the data we have
@@ -131,8 +142,11 @@ index<-match(gene, unique(gene))
 M1_table<-list(N=N, J=J, y=table$envarpfc,
 x=table$envarp,gene=index)
 
-fit1<-stan(model_code=gene_code, data=M1_table,
-                  iter=20, chains=4)
+
+## Jeff, add one fit0 here
+fit0 <- stan(file = 'possion.gene.rstan .stan')
+
+fit1 <- stan(model_code=gene_code, data=M1_table, iter=20, chains=4)
 
 print(fit1, "a")
 print (fit1, "beta")

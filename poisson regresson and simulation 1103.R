@@ -105,15 +105,15 @@ lines(xvalues, mean_value.overdis)
 mute.log <- log(mute)
 mute.log
 
-fitLogMute <- glm(mute.log ~ age, family = "poisson")
+fitLogMute <- glm(age ~ mute.log, family = "poisson")
 summary(fitLogMute)
 
 ## coeff of log mutations against age
 coeff.log <- coef(fitLogMute)
 coeff.log
 
-plot(age, mute.log)
-x_values.log <- sort(age)
+plot(mute.log, age)
+x_values.log <- sort(mute.log)
 
 mean.log <- coeff.log[1] + coeff.log[2] * x_values.log
 mean_value.log <- exp(mean.log)

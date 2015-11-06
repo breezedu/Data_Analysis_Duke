@@ -9,10 +9,14 @@
 
 ## Data source and copyright?
 ## Read in table from local hard drive:
+<<<<<<< HEAD
 ## setup the working directory to where exon_level_process_v2.txt locates
 
 table <- read.table("exon_level_process_v2.txt")
 table <- read.table("D:/GitHub/Stats/Data_Analysis_Duke/SQProject/exon_level_process_v2.txt")
+=======
+table <- read.table("exon_level_process_v2.txt")
+>>>>>>> 5df80c86345f106076e757840ae8166d4522c026
 #table<-read.table("C:/Users/shuaiqi/Desktop/duke/Andrew/data/for_asa/other_stuff/exon_level_process_v3.txt")
 
 

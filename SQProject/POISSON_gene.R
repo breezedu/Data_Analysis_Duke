@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+## ShuaiQi's Project
+>>>>>>> 5df80c86345f106076e757840ae8166d4522c026
 ## Date 11-04-2015
 ## Aim:
 ## @ authors:
@@ -8,6 +12,7 @@
 
 #using glmer for poisson multilevel regression
 install.packages("lme4")
+<<<<<<< HEAD
 
 library("lme4")
 
@@ -20,6 +25,17 @@ my.control = glmerControl(optCtrl = list(maxfun=1000) )
 fitgene <- glmer(envarpfc~(1|gene)+envarp+1,data=table, family=poisson(link="log"),my.control) 
 
 ## summary the fitness
+=======
+install.packages("Matrix")
+
+library("Matrix")
+library("lme4")
+
+
+
+my.control=glmerControl(optCtrl=list(maxfun=20) ) 
+fitgene<-glmer(envarpfc~(1|gene)+envarp+1,data=table, family=poisson(link="log"),control = my.control) 
+>>>>>>> 5df80c86345f106076e757840ae8166d4522c026
 summary(fitgene)
 
 ## assign coefficient vector to result
@@ -115,6 +131,7 @@ summary(logomim)
      
 
 
+<<<<<<< HEAD
 
 #####################################
 ## 
@@ -165,6 +182,49 @@ transformed parameters{ #specify the model we will use
 	} #end transformed parameters
 
 
+=======
+#############################################################
+## have to download and install RTools33.exe for windows OS
+#############################################################
+#use stan
+install.packages("rstan")
+
+library("rstan")
+
+
+## For execution on a local, multicore CPU with excess RAM we recommend calling
+## rstan_options(auto_write = TRUE)
+## options(mc.cores = parallel::detectCores())
+rstan_options(auto_write = TRUE)
+options(mc.cores = parallel::detectCores())
+
+
+gene_code<-"
+data{   #get the data we have
+int <lower=0> N; #number of obs
+int <lower=0> J; #number of gene level 
+int <lower=1,upper=J> gene[N];
+vector[N] x;  #x
+int <lower=0> y[N] ; #y
+}
+
+parameters{ #specify the parameter we want to know 
+vector[J] a;  #random intercept when gene is the level 
+real <lower=0> sigma_a;  #variance of intercept
+real <lower=0> sigma_epsilon; #variance of dispersion
+real beta;    #common slope;
+vector[N] epsilon_raw;
+}
+
+transformed parameters{ #specify the model we will use 
+vector[N] lambda;
+vector[N] epsilon; #amount of dispersion 
+for (i in 1:N) 
+     epsilon[i]<-sigma_epsilon*epsilon_raw[i];
+for (i in 1:N) 
+     lambda[i] <- beta*x[i]+a[gene[i]]+epsilon[i];#specify the group
+}
+>>>>>>> 5df80c86345f106076e757840ae8166d4522c026
 
 model { #give the prior distribution
   
@@ -175,10 +235,13 @@ model { #give the prior distribution
 }
 "
 
+<<<<<<< HEAD
 
 ######################
 # init the parameters
 ######################
+=======
+>>>>>>> 5df80c86345f106076e757840ae8166d4522c026
 N<-dim(table)[1]
 J<-dim(table1)[1]
 gene<-as.numeric(table$gene)
@@ -188,24 +251,41 @@ M1_table<-list(N=N, J=J, y=table$envarpfc,
 x=table$envarp,gene=index)
 
 
+<<<<<<< HEAD
 
 ## fit0<-stan(file='D:/GitHub/Stats/Data_Analysis_Duke/SQProject/possion.gene.rstan .stan')
 ## fit1<-stan(model_code="D:/GitHub/Stats/Data_Analysis_Duke/SQProject/possion.gene.rstan .stan", data=M1_table, iter=100, chains=4)
 
 fit1 <- stan(model_code = gene_code, data=M1_table, iter=2000, chains=4)
 
+=======
+## Jeff, add one fit0 here
+fit0 <- stan(file = 'possion.gene.rstan .stan')
+
+fit1 <- stan(model_code=gene_code, data=M1_table, iter=20, chains=4)
+>>>>>>> 5df80c86345f106076e757840ae8166d4522c026
 
 print(fit1, "a")
 print (fit1, "beta")
 answer1<-extract(fit1, permuted = TRUE)
 effect<-answer1$a
+<<<<<<< HEAD
 write.table(effect, "D:/GitHub/Stats/Data_Analysis_Duke/SQProject/effectstan.txt", sep="\t")
+=======
+
+write.table(effect, "C:/Users/shuaiqi/Desktop/duke/Andrew/project/effectstan.txt", sep="\t")
+>>>>>>> 5df80c86345f106076e757840ae8166d4522c026
 
 #check convergence 
 pdf("D:/GitHub/Stats/Data_Analysis_Duke/SQProject/traceplot.pdf")
 traceplot(fit1,pars=c("a","beta"))
 dev.off()
 
+<<<<<<< HEAD
 ##################
 ## END 
 ##################
+=======
+
+############
+>>>>>>> 5df80c86345f106076e757840ae8166d4522c026

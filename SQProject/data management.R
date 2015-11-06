@@ -9,7 +9,10 @@
 
 ## Data source and copyright?
 ## Read in table from local hard drive:
-table <- read.table("C:/Users/shuaiqi/Desktop/duke/Andrew/data/for_asa/other_stuff/exon_level_process_v2.txt")
+## setup the working directory to where exon_level_process_v2.txt locates
+
+table <- read.table("exon_level_process_v2.txt")
+table <- read.table("D:/GitHub/Stats/Data_Analysis_Duke/SQProject/exon_level_process_v2.txt")
 #table<-read.table("C:/Users/shuaiqi/Desktop/duke/Andrew/data/for_asa/other_stuff/exon_level_process_v3.txt")
 
 
@@ -33,7 +36,7 @@ table<-within(table,gene.dom.subdom<-factor(gene.dom.subdom))
 
 
 
-#table<-table[1:100,]
+## table<-table[1:100,]
 #for the use of counting number of gene
 sumenvarp<-aggregate(table$envarp, by=list(Category=table$gene), FUN=sum)
 
@@ -46,6 +49,9 @@ table1<-data.frame(cbind(sumenvarp,sumenvarpfc))
 ## assign column names to table1
 colnames(table1)<-c("gene","sumenvarp","sumenvarpfc")
 
+
+
+#####################################################
 #for the use of counting number of gene.dom
 sumenvarpgenedom<-aggregate(table$envarp, by=list(Category=table$gene.dom), FUN=sum)
 

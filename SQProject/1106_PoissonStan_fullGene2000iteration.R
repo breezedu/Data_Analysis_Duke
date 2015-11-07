@@ -17,10 +17,11 @@
 ##########################################
 
 
-table <- read.table("exon_level_process_v2.txt")
-## table <- read.table("D:/GitHub/Stats/Data_Analysis_Duke/SQProject/exon_level_process_v2.txt")
-# table<-read.table("C:/Users/shuaiqi/Desktop/duke/Andrew/data/for_asa/other_stuff/exon_level_process_v3.txt")
+##table <- read.table("exon_level_process_v2.txt")
+ table <- read.table("D:/GitHubRepositories/DataStats/Data_Analysis_Duke/SQProject/exon_level_process_v2.txt")
 
+# table<-read.table("C:/Users/shuaiqi/Desktop/duke/Andrew/data/for_asa/other_stuff/exon_level_process_v3.txt")
+#                     D:\GitHubRepositories\DataStats\Data_Analysis_Duke\SQProject
 
 ## assign column names
 colnames(table) <- c("chr", "gene", "dom", "subdom", "exon", "gene.dom", 
@@ -135,7 +136,7 @@ x=table$envarp,gene=index)
 ## fit0<-stan(file='D:/GitHub/Stats/Data_Analysis_Duke/SQProject/possion.gene.rstan .stan')
 ## fit1<-stan(model_code="D:/GitHub/Stats/Data_Analysis_Duke/SQProject/possion.gene.rstan .stan", data=M1_table, iter=100, chains=4)
 
-fit1 <- stan(model_code = gene_code, data=M1_table, iter=2000, chains=4)
+fit1 <- stan(model_code = gene_code, data=M1_table, iter=500, chains=4)
 
 
 print(fit1, "a")

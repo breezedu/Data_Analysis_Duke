@@ -1,5 +1,5 @@
 ## ShuaiQi's Project
-## Date 11-04-2015
+## Date 11-10-2015
 ## Aim:
 ## @ authors:
 ## Data source:
@@ -44,6 +44,7 @@ table<-within(table,gene.dom.subdom<-factor(gene.dom.subdom))
 
 ##
 table<-table[1:100000,]
+
 #for the use of counting number of gene
 sumenvarp<-aggregate(table$envarp, by=list(Category=table$gene), FUN=sum)
 
@@ -68,53 +69,11 @@ colnames(table1)<-c("gene","sumenvarp","sumenvarpfc")
 
 library("rstan")
 
+rstan_options(auto_write = TRUE)
+options(mc.cores = parallel::detectCores())
+
 ##gene_code
-gene_code <- "
 
-	data{   #get the data we have
-	int <lower=0> N; #number of obs
-	int <lower=0> J; #number of gene level 
-	int <lower=1,upper=J> gene[N];
-	int <lower=0> x[N];  #x
-	int <lower=0> y[N] ; #y
-
-	} #end data
-
-
-## parameters
-parameters{ #specify the parameter we want to know 
-
-	vector[J] a;  #random intercept when gene is the level 
-	real <lower=0> sigma_a;  #variance of intercept
-	real <lower=0> sigma_epsilon; #variance of dispersion
-	real beta;    #common slope;
-	vector[N] epsilon_raw;
-
-	} #end parameters
-
-
-## transformed parameters
-transformed parameters{ #specify the model we will use 
-
-	vector[N] lambda;
-	vector[N] epsilon; #amount of dispersion 
-	for (i in 1:N) 
-     		epsilon[i]<-sigma_epsilon*epsilon_raw[i];
-	for (i in 1:N) 
-	     lambda[i] <- beta*x[i]+a[gene[i]]+epsilon[i];#specify the group
-	
-	} #end transformed parameters
-
-
-
-model { #give the prior distribution
-  
-  beta ~ normal(0,10);
-  a ~ normal(0, sigma_a);
-  epsilon_raw~normal(0,1);
-  y ~ poisson_log(lambda); #y and y_hat should have same type 
-}
-"
 
 
 ######################
@@ -129,24 +88,27 @@ M1_table<-list(N=N, J=J, y=table$envarpfc,
 x=table$envarp,gene=index)
 
 
+## fit rstan()
 
+## fit the model
+fit0 <- stan(file = "possion.gene.rstan .stan")
 
+## fit the model with data
+fit1 <- stan(fit=fit0, data = M1_table, iter = 4000, chains=4)
 
-## fit0<-stan(file='D:/GitHub/Stats/Data_Analysis_Duke/SQProject/possion.gene.rstan .stan')
-## fit1<-stan(model_code="D:/GitHub/Stats/Data_Analysis_Duke/SQProject/possion.gene.rstan .stan", data=M1_table, iter=100, chains=4)
-
-fit1 <- stan(model_code = gene_code, data=M1_table, iter=2000, chains=4)
+## fit1 <- stan(model_code = gene_code, data=M1_table, iter=4000, chains=4)
 
 
 print(fit1, "a")
 print (fit1, "beta")
 answer1<-extract(fit1, permuted = TRUE)
 effect<-answer1$a
-write.table(effect, "effectstan.txt", sep="\t")
+write.table(effect, "1110_100Kgene_effectstan.txt", sep="\t")
 
 #check convergence 
-pdf("traceplot.pdf")
+pdf("1110_100Kgene_traceplot.pdf")
 traceplot(fit1,pars=c("a","beta"))
+traceplot(fit1, pars=c("beta", "beta"))
 dev.off()
 
 ##################

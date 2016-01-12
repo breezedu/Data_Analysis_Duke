@@ -43,7 +43,7 @@ table<-within(table,gene.dom.subdom<-factor(gene.dom.subdom))
 
 
 ##
-## table<-table[1:2000,]
+table<-table[1:5000,]
 #for the use of counting number of gene
 sumenvarp<-aggregate(table$envarp, by=list(Category=table$gene), FUN=sum)
 
@@ -67,6 +67,9 @@ colnames(table1)<-c("gene","sumenvarp","sumenvarpfc")
 #install.packages("rstan")
 
 library("rstan")
+
+rstan_options(auto_write = TRUE)
+options(mc.cores = parallel::detectCores())
 
 ##gene_code
 gene_code <- "
@@ -135,17 +138,21 @@ x=table$envarp,gene=index)
 ## fit0<-stan(file='D:/GitHub/Stats/Data_Analysis_Duke/SQProject/possion.gene.rstan .stan')
 ## fit1<-stan(model_code="D:/GitHub/Stats/Data_Analysis_Duke/SQProject/possion.gene.rstan .stan", data=M1_table, iter=100, chains=4)
 
-fit1 <- stan(model_code = gene_code, data=M1_table, iter=2000, chains=4)
+
+fit0 <- stan(file = "possion.gene.rstan .stan")
+fit1 <- stan(fit=fit0, data = M1_table, iter = 200, chains=4)
+
+## fit1 <- stan(model_code = gene_code, data=M1_table, iter=2000, chains=4)
 
 
 print(fit1, "a")
 print (fit1, "beta")
 answer1<-extract(fit1, permuted = TRUE)
 effect<-answer1$a
-write.table(effect, "effectstan.txt", sep="\t")
+write.table(effect, "5000effectstan.txt", sep="\t")
 
 #check convergence 
-pdf("traceplot.pdf")
+pdf("5000traceplot.pdf")
 traceplot(fit1,pars=c("a","beta"))
 dev.off()
 
